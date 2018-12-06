@@ -5,3 +5,6 @@
 *.o
 !Makefile
 DerivedData
+.DS_Store
+*.png
+*.py
