@@ -8,6 +8,7 @@ SRCS      := $(shell find ./ -name "*.cpp")
 LIBS      := -lpthread \
 	     -ldl \
 	     -lboost_system \
+	     -lboost_program_options \
 		 `pkg-config opencv --libs` \
 	     -lm
 
