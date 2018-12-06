@@ -43,7 +43,7 @@ int main(int argc, const char * argv[]) {
     using namespace boost::program_options;
     options_description description("Face options");
     description.add_options()
-    ("mode,m", value<int>()->required(), "Executing mode.\n*** YOU MUST SELECT EXEC MODE. ***\n0: Detect faces without identify.\n1: Identify faces.\n2: Create face database.")
+    ("mode,m", value<int>(), "Executing mode.\n*** YOU MUST SELECT EXEC MODE. ***\n0: Detect faces without identify.\n1: Identify faces.\n2: Create face database.")
     ("sample,s", "Face sample's directory. All face samples will be inspected. It is required to create face database.")
     ("db,d", "Face database file path. It is required to identify faces.")
     ("help,h", "Show helps")
@@ -61,18 +61,23 @@ int main(int argc, const char * argv[]) {
             std::cerr << "v.0.0.1" << std::endl;
             return 1;
         }
-        switch(vm["mode"].as<int>()){
-        default:
-            throw std::runtime_error("Undefined mode.");
-        case 0:
-            detect_faces_mode();
-            return 0;
-        case 1:
-            identify_faces_mode(vm["db"].as<std::string>());
-            return 0;
-        case 2:
-            create_database_mode(vm["samples"].as<std::string>());
-            return 0;
+        try{
+            switch(vm["mode"].as<int>()){
+            default:
+                throw std::runtime_error("Undefined mode.");
+            case 0:
+                detect_faces_mode();
+                return 0;
+            case 1:
+                identify_faces_mode(vm["db"].as<std::string>());
+                return 0;
+            case 2:
+                create_database_mode(vm["samples"].as<std::string>());
+                return 0;
+            }
+        }catch(std::exception const & e){
+            std::cerr << e.what() << std::endl;
+            return 1;
         }
     }catch(std::exception const & e){
         std::cerr << e.what() << std::endl << description << std::endl;
