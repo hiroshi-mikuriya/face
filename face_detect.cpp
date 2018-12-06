@@ -33,17 +33,16 @@ FaceDetector::FaceDetector(std::string const & xml)
 
 std::vector<cv::Rect> FaceDetector::detect(cv::Mat const & m)
 {
-    auto img = gamma(m, 2.0);
+    auto img0 = gamma(m, 2.0);
     double r = 0.25;
-    std::vector<cv::Rect> rects;
-    cv::Mat rimg;
-    cv::resize(img, rimg, cv::Size(), r, r);
-    m_cascade.detectMultiScale(rimg, rects, 1.1, 5, 0, cv::Size(100, 100) * r);
-    std::vector<cv::Rect> faces;
-    for(auto rc : rects){
-        faces.push_back(rc / r);
-    }
-    return faces;
+    std::vector<cv::Rect> tmp, dst;
+    cv::Mat img1;
+    cv::resize(img0, img1, cv::Size(), r, r);
+    m_cascade.detectMultiScale(img1, tmp, 1.1, 5, 0, cv::Size(100, 100) * r);
+    std::transform(tmp.begin(), tmp.end(), std::back_inserter(dst), [r](cv::Rect const & rc){
+        return rc / r;
+    });
+    return dst;
 }
 
 bool FaceDetector::loaded()const
