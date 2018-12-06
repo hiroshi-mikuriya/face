@@ -56,7 +56,9 @@ namespace
             auto faces = detector.detect(m);
             for(auto rc : faces){
                 auto info = identifier.who(m(rc));
-                cv::rectangle(m, rc, cv::Scalar(0xFF, 0, 0), 2);
+                cv::Scalar const c(0xFF, 0, 0);
+                cv::rectangle(m, rc, c, 2);
+                cv::putText(m, info.id, rc.tl(), cv::FONT_HERSHEY_SIMPLEX, 1.2, c, 2, CV_AA);
             }
             cv::imshow("camera", m);
             cv::waitKey(1);

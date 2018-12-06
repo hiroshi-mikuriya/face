@@ -19,8 +19,9 @@
 		2812510021B8ADAC005DCF99 /* libopencv_videoio.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 281250FA21B8ADAC005DCF99 /* libopencv_videoio.a */; };
 		2812510121B8ADAC005DCF99 /* libopencv_highgui.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 281250FB21B8ADAC005DCF99 /* libopencv_highgui.a */; };
 		2812510221B8ADAC005DCF99 /* libopencv_core.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 281250FC21B8ADAC005DCF99 /* libopencv_core.a */; };
-		2812510B21B8B645005DCF99 /* face_detect.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2812510921B8B645005DCF99 /* face_detect.cpp */; };
 		2812510C21B8B645005DCF99 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2812510A21B8B645005DCF99 /* main.cpp */; };
+		2812511121B8E2F2005DCF99 /* face_identifier.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2812510F21B8E2F2005DCF99 /* face_identifier.cpp */; };
+		2812511221B8E2F2005DCF99 /* face_detector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2812511021B8E2F2005DCF99 /* face_detector.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -54,9 +55,11 @@
 		281250FA21B8ADAC005DCF99 /* libopencv_videoio.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libopencv_videoio.a; path = ../../../../usr/local/lib/libopencv_videoio.a; sourceTree = "<group>"; };
 		281250FB21B8ADAC005DCF99 /* libopencv_highgui.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libopencv_highgui.a; path = ../../../../usr/local/lib/libopencv_highgui.a; sourceTree = "<group>"; };
 		281250FC21B8ADAC005DCF99 /* libopencv_core.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libopencv_core.a; path = ../../../../usr/local/lib/libopencv_core.a; sourceTree = "<group>"; };
-		2812510821B8B645005DCF99 /* face_detect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = face_detect.h; sourceTree = "<group>"; };
-		2812510921B8B645005DCF99 /* face_detect.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = face_detect.cpp; sourceTree = "<group>"; };
 		2812510A21B8B645005DCF99 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		2812510D21B8E2F1005DCF99 /* face_identifier.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = face_identifier.h; sourceTree = "<group>"; };
+		2812510E21B8E2F1005DCF99 /* face_detector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = face_detector.h; sourceTree = "<group>"; };
+		2812510F21B8E2F2005DCF99 /* face_identifier.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = face_identifier.cpp; sourceTree = "<group>"; };
+		2812511021B8E2F2005DCF99 /* face_detector.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = face_detector.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -85,9 +88,11 @@
 		281250CD21B8ABF5005DCF99 = {
 			isa = PBXGroup;
 			children = (
-				2812510921B8B645005DCF99 /* face_detect.cpp */,
-				2812510821B8B645005DCF99 /* face_detect.h */,
 				2812510A21B8B645005DCF99 /* main.cpp */,
+				2812511021B8E2F2005DCF99 /* face_detector.cpp */,
+				2812510E21B8E2F1005DCF99 /* face_detector.h */,
+				2812510F21B8E2F2005DCF99 /* face_identifier.cpp */,
+				2812510D21B8E2F1005DCF99 /* face_identifier.h */,
 				281250D721B8ABF5005DCF99 /* Products */,
 				281250E021B8AD29005DCF99 /* Frameworks */,
 			);
@@ -182,7 +187,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				2812510C21B8B645005DCF99 /* main.cpp in Sources */,
-				2812510B21B8B645005DCF99 /* face_detect.cpp in Sources */,
+				2812511221B8E2F2005DCF99 /* face_detector.cpp in Sources */,
+				2812511121B8E2F2005DCF99 /* face_identifier.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
