@@ -61,8 +61,9 @@ int main(int argc, const char * argv[]) {
             std::cerr << "v.0.0.1" << std::endl;
             return 1;
         }
+        int mode = vm["mode"].as<int>();
         try{
-            switch(vm["mode"].as<int>()){
+            switch(mode){
             default:
                 throw std::runtime_error("Undefined mode.");
             case 0:
