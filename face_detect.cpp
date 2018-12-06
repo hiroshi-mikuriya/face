@@ -45,3 +45,13 @@ std::vector<cv::Rect> FaceDetector::detect(cv::Mat const & m)
     }
     return faces;
 }
+
+bool FaceDetector::loaded()const
+{
+    return !m_cascade.empty();
+}
+
+void FaceDetector::load(const std::string &xml)
+{
+    m_cascade.load(xml);
+}
