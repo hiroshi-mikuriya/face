@@ -1,16 +1,20 @@
 #include <opencv2/opencv.hpp>
 #include <boost/program_options.hpp>
 #include <exception>
-#include "face_detect.h"
+#include "face_detector.h"
+#include "face_identifier.h"
 
 namespace
 {
     void detect_faces_mode()
     {
         cv::VideoCapture cap(0);
-        FaceDetector detector("haarcascade_frontalface_default.xml");
         if(!cap.isOpened()){
             throw std::runtime_error("failed to open camera.");
+        }
+        FaceDetector detector("haarcascade_frontalface_default.xml");
+        if(!detector.loaded()){
+            throw std::runtime_error("failed to load face detect file.");
         }
         for(;;){
             cv::Mat m;
@@ -30,7 +34,33 @@ namespace
 
     void identify_faces_mode(std::string const & db)
     {
-
+        cv::VideoCapture cap(0);
+        if(!cap.isOpened()){
+            throw std::runtime_error("failed to open camera.");
+        }
+        FaceDetector detector("haarcascade_frontalface_default.xml");
+        if(!detector.loaded()){
+            throw std::runtime_error("failed to load face detect file.");
+        }
+        FaceIdentifier identifier("TODO");
+        if(!identifier.loaded()){
+            throw std::runtime_error("failed to load face database.");
+        }
+        for(;;){
+            cv::Mat m;
+            cap >> m;
+            if(m.empty()){
+                std::cerr << "image is empty." << std::endl;
+                continue;
+            }
+            auto faces = detector.detect(m);
+            for(auto rc : faces){
+                auto info = identifier.who(m(rc));
+                cv::rectangle(m, rc, cv::Scalar(0xFF, 0, 0), 2);
+            }
+            cv::imshow("camera", m);
+            cv::waitKey(1);
+        }
     }
 
     void create_database_mode(std::string const & dir)

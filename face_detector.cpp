@@ -1,4 +1,4 @@
-#include "face_detect.h"
+#include "face_detector.h"
 
 namespace
 {
