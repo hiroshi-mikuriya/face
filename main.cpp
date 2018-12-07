@@ -69,15 +69,71 @@ namespace
     {
 
     }
+
+    int main_identify(int argc, const char * argv[]) {
+        using namespace boost::program_options;
+        options_description description("Identify options");
+        description.add_options()
+        ("sample,s", value<std::string>()->required(), "Directory path including face images.")
+        ("help,h", "Show helps")
+        ;
+        try{
+            variables_map vm;
+            store(parse_command_line(argc, argv, description), vm);
+            notify(vm);
+            if(vm.count("help")){
+                std::cerr << description << std::endl;
+                return 1;
+            }
+            try{
+                create_database_mode(vm["sample"].as<std::string>());
+                return 0;
+            }catch(std::exception const & e){
+                std::cerr << e.what() << std::endl;
+                return 1;
+            }
+        }catch(std::exception const & e){
+            std::cerr << e.what() << std::endl << description << std::endl;
+            return 1;
+        }
+    }
+
+    int main_create(int argc, const char * argv[]) {
+        using namespace boost::program_options;
+        options_description description("Identify options");
+        description.add_options()
+        ("db,d", value<std::string>()->required(), "Face database file path. It is required to identify faces.")
+        ("help,h", "Show helps")
+        ;
+        try{
+            variables_map vm;
+            store(parse_command_line(argc, argv, description), vm);
+            notify(vm);
+            if(vm.count("help")){
+                std::cerr << description << std::endl;
+                return 1;
+            }
+            try{
+                identify_faces_mode(vm["db"].as<std::string>());
+                return 0;
+            }catch(std::exception const & e){
+                std::cerr << e.what() << std::endl;
+                return 1;
+            }
+        }catch(std::exception const & e){
+            std::cerr << e.what() << std::endl << description << std::endl;
+            return 1;
+        }
+    }
 }
 
 int main(int argc, const char * argv[]) {
     using namespace boost::program_options;
     options_description description("Face options");
     description.add_options()
-    ("mode,m", value<int>(), "Executing mode.\n*** YOU MUST SELECT EXEC MODE. ***\n0: Detect faces without identify.\n1: Identify faces.\n2: Create face database.")
-    ("sample,s", "Face sample's directory. All face samples will be inspected. It is required to create face database.")
-    ("db,d", "Face database file path. It is required to identify faces.")
+    ("detect", "Detect faces without identify.")
+    ("identify", "Identify faces.")
+    ("create", "Create face database.")
     ("help,h", "Show helps")
     ("version,v", "Show version.")
     ;
@@ -93,25 +149,22 @@ int main(int argc, const char * argv[]) {
             std::cerr << "v.0.0.1" << std::endl;
             return 1;
         }
-        int mode = vm["mode"].as<int>();
-        try{
-            switch(mode){
-            default:
-                throw std::runtime_error("Undefined mode.");
-            case 0:
+        if(vm.count("detect")){
+            try{
                 detect_faces_mode();
                 return 0;
-            case 1:
-                identify_faces_mode(vm["db"].as<std::string>());
-                return 0;
-            case 2:
-                create_database_mode(vm["samples"].as<std::string>());
-                return 0;
+            }catch(std::exception const & e){
+                std::cerr << e.what() << std::endl;
+                return 1;
             }
-        }catch(std::exception const & e){
-            std::cerr << e.what() << std::endl;
-            return 1;
         }
+        if(vm.count("identify")){
+            return main_identify(argc - 1, argv + 1);
+        }
+        if(vm.count("create")){
+            return main_create(argc - 1, argv + 1);
+        }
+        throw std::runtime_error("*** You should select valid exec mode. ***");
     }catch(std::exception const & e){
         std::cerr << e.what() << std::endl << description << std::endl;
         return 1;
