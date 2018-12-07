@@ -6,9 +6,9 @@
 
 namespace
 {
-    void detect_faces_mode()
+    void detect_faces_mode(int camera)
     {
-        cv::VideoCapture cap(0);
+        cv::VideoCapture cap(camera);
         if(!cap.isOpened()){
             throw std::runtime_error("failed to open camera.");
         }
@@ -32,9 +32,9 @@ namespace
         }
     }
 
-    void identify_faces_mode(std::string const & db)
+    void identify_faces_mode(int camera, std::string const & db)
     {
-        cv::VideoCapture cap(0);
+        cv::VideoCapture cap(camera);
         if(!cap.isOpened()){
             throw std::runtime_error("failed to open camera.");
         }
@@ -70,10 +70,39 @@ namespace
 
     }
 
+    int main_detect(int argc, const char * argv[]) {
+        using namespace boost::program_options;
+        options_description description("Detect options");
+        description.add_options()
+        ("camera,c", value<int>()->default_value(0), "Camera number")
+        ("help,h", "Show helps")
+        ;
+        try{
+            variables_map vm;
+            store(parse_command_line(argc, argv, description), vm);
+            notify(vm);
+            if(vm.count("help")){
+                std::cerr << description << std::endl;
+                return 1;
+            }
+            try{
+                detect_faces_mode(vm["camera"].as<int>());
+                return 0;
+            }catch(std::exception const & e){
+                std::cerr << e.what() << std::endl;
+                return 1;
+            }
+        }catch(std::exception const & e){
+            std::cerr << e.what() << std::endl << description << std::endl;
+            return 1;
+        }
+    }
+
     int main_identify(int argc, const char * argv[]) {
         using namespace boost::program_options;
         options_description description("Identify options");
         description.add_options()
+        ("camera,c", value<int>()->default_value(0), "Camera number")
         ("sample,s", value<std::string>()->required(), "Directory path including face images.")
         ("help,h", "Show helps")
         ;
@@ -86,7 +115,7 @@ namespace
                 return 1;
             }
             try{
-                create_database_mode(vm["sample"].as<std::string>());
+                identify_faces_mode(vm["camera"].as<int>(), vm["sample"].as<std::string>());
                 return 0;
             }catch(std::exception const & e){
                 std::cerr << e.what() << std::endl;
@@ -114,7 +143,7 @@ namespace
                 return 1;
             }
             try{
-                identify_faces_mode(vm["db"].as<std::string>());
+                create_database_mode(vm["db"].as<std::string>());
                 return 0;
             }catch(std::exception const & e){
                 std::cerr << e.what() << std::endl;
@@ -139,7 +168,7 @@ int main(int argc, const char * argv[]) {
     ;
     try{
         variables_map vm;
-        store(parse_command_line(argc, argv, description), vm);
+        store(parse_command_line(std::min(argc, 2), argv, description), vm);
         notify(vm);
         if(vm.count("help")){
             std::cerr << description << std::endl;
@@ -150,13 +179,7 @@ int main(int argc, const char * argv[]) {
             return 1;
         }
         if(vm.count("detect")){
-            try{
-                detect_faces_mode();
-                return 0;
-            }catch(std::exception const & e){
-                std::cerr << e.what() << std::endl;
-                return 1;
-            }
+            return main_detect(argc - 1, argv + 1);
         }
         if(vm.count("identify")){
             return main_identify(argc - 1, argv + 1);
