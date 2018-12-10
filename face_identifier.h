@@ -9,6 +9,8 @@ struct Feature
 {
     std::vector<cv::KeyPoint> points;
     cv::Mat desc;
+    std::string id;
+    cv::Mat img;
     Feature(cv::Mat m);
 };
 

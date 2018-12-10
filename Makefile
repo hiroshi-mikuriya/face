@@ -9,6 +9,7 @@ LIBS      := -lpthread \
 	     -ldl \
 	     -lboost_system \
 	     -lboost_program_options \
+	     -lboost_filesystem \
 		 `pkg-config opencv --libs` \
 	     -lm
 

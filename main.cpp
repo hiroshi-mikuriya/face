@@ -42,7 +42,7 @@ namespace
         if(!detector.loaded()){
             throw std::runtime_error("failed to load face detect file.");
         }
-        FaceIdentifier identifier("TODO");
+        FaceIdentifier identifier(db);
         if(!identifier.loaded()){
             throw std::runtime_error("failed to load face database.");
         }
