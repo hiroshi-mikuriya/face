@@ -1,6 +1,7 @@
 #include <opencv2/opencv.hpp>
 #include <boost/program_options.hpp>
 #include <exception>
+#include <chrono>
 #include "face_detector.h"
 #include "face_identifier.h"
 
@@ -23,7 +24,11 @@ namespace
                 std::cerr << "image is empty." << std::endl;
                 continue;
             }
+            auto start = std::chrono::system_clock::now();
             auto faces = detector.detect(m);
+            auto end = std::chrono::system_clock::now();
+            auto msec = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
+            std::cout << "face detect time : " << msec << std::endl;
             for(auto rc : faces){
                 cv::rectangle(m, rc, cv::Scalar(0xFF, 0, 0), 2);
             }
@@ -53,7 +58,11 @@ namespace
                 std::cerr << "image is empty." << std::endl;
                 continue;
             }
+            auto start = std::chrono::system_clock::now();
             auto faces = detector.detect(m);
+            auto end = std::chrono::system_clock::now();
+            auto msec = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
+            std::cout << "face detect time : " << msec << std::endl;
             for(auto rc : faces){
                 auto info = identifier.who(m(rc));
                 cv::Scalar const c(0xFF, 0, 0);
