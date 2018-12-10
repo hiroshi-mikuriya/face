@@ -21,6 +21,8 @@ FaceIdentifier::FaceIdentifier(std::string const & db)
 }
 
 static std::vector<Feature> s_features;
+static std::vector<cv::KeyPoint> s_keyPoints;
+static cv::Mat s_desc;
 
 void FaceIdentifier::load(std::string const & db)
 {
@@ -57,6 +59,8 @@ FaceInfo FaceIdentifier::who(cv::Mat const & m)
 {
     Feature master(m);
     cv::Ptr<cv::DescriptorMatcher> matcher = cv::DescriptorMatcher::create("BruteForce");
+    std::string matchId;
+    float best_score = 0xFFFFFFFF;
     for(auto const & sample : s_features){
         std::vector<cv::DMatch> match, match12, match21;
         matcher->match(master.desc, sample.desc, match12);
@@ -70,9 +74,16 @@ FaceInfo FaceIdentifier::who(cv::Mat const & m)
         }
         cv::Mat dest;
         cv::drawMatches(m, master.points, sample.img, sample.points, match, dest);
-        cv::imshow(sample.id, dest);
+        float score = 0;
+        for(auto m : match){
+            score += m.distance;
+        }
+        if(score < best_score){
+            best_score = score;
+            matchId = sample.id;
+        }
     }
     FaceInfo dst;
-    dst.id = s_features.front().id;
+    dst.id = matchId;
     return dst;
 }
