@@ -13,6 +13,8 @@ namespace
         if(!cap.isOpened()){
             throw std::runtime_error("failed to open camera.");
         }
+        cap.set(CV_CAP_PROP_FRAME_WIDTH, 640);
+        cap.set(CV_CAP_PROP_FRAME_HEIGHT, 480);
         FaceDetector detector("haarcascade_frontalface_default.xml");
         if(!detector.loaded()){
             throw std::runtime_error("failed to load face detect file.");
@@ -43,6 +45,8 @@ namespace
         if(!cap.isOpened()){
             throw std::runtime_error("failed to open camera.");
         }
+        cap.set(CV_CAP_PROP_FRAME_WIDTH, 640);
+        cap.set(CV_CAP_PROP_FRAME_HEIGHT, 480);
         FaceDetector detector("haarcascade_frontalface_default.xml");
         if(!detector.loaded()){
             throw std::runtime_error("failed to load face detect file.");
